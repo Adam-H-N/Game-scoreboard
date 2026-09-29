@@ -6,164 +6,230 @@
 <title>Score Controller</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #101010;
-    color: white;
-    padding: 20px;
-}
+    body {
+        background: #111;
+        color: white;
+        padding: 20px;
+    }
 
-h1 {
-    text-align: center;
-    margin: 10px 0 5px;
-}
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 32px;
+    }
 
-.subtitle {
-    text-align: center;
-    color: #aaa;
-    margin-bottom: 25px;
-}
+    .status {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 16px;
+        color: #00ff88;
+    }
 
-.team {
-    border-radius: 18px;
-    padding: 18px;
-    margin-bottom: 18px;
-}
+    .teams {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        max-width: 900px;
+        margin: auto;
+    }
 
-.red {
-    background: #c62828;
-}
+    .team-card {
+        border-radius: 20px;
+        padding: 20px;
+        color: white;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
 
-.blue {
-    background: #1565c0;
-}
+    .red {
+        background: linear-gradient(135deg, #ff1744, #9b001f);
+    }
 
-.green {
-    background: #2e7d32;
-}
+    .blue {
+        background: linear-gradient(135deg, #2979ff, #003c9e);
+    }
 
-.yellow {
-    background: #d99a00;
-    color: #111;
-}
+    .green {
+        background: linear-gradient(135deg, #00c853, #006b2c);
+    }
 
-.team-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
+    .yellow {
+        background: linear-gradient(135deg, #ffd600, #a87900);
+        color: #111;
+    }
 
-.team-name {
-    font-size: 24px;
-    font-weight: bold;
-}
+    .team-name {
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
 
-.total {
-    font-size: 26px;
-    font-weight: bold;
-}
+    .rounds {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
 
-.rounds {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-}
+    .round {
+        text-align: center;
+    }
 
-.round label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
+    .round label {
+        display: block;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
 
-.round input {
-    width: 100%;
-    padding: 13px 5px;
-    border: none;
-    border-radius: 9px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    outline: none;
-}
+    .score-input {
+        width: 100%;
+        height: 55px;
+        border: none;
+        border-radius: 12px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        outline: none;
+    }
 
-button {
-    width: 100%;
-    padding: 16px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
+    .total {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 24px;
+        font-weight: bold;
+    }
 
-.reset {
-    background: #d32f2f;
-    color: white;
-}
+    .ranking {
+        max-width: 900px;
+        margin: 30px auto;
+        background: #1c1c1c;
+        padding: 20px;
+        border-radius: 20px;
+    }
 
-.status {
-    text-align: center;
-    margin: 15px 0;
-    font-size: 14px;
-    color: #69f0ae;
-}
+    .ranking h2 {
+        text-align: center;
+        margin-bottom: 15px;
+    }
 
-.ranking {
-    background: #1c1c1c;
-    border-radius: 18px;
-    padding: 20px;
-    margin-top: 25px;
-}
+    .rank-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #292929;
+        padding: 15px 20px;
+        margin: 8px 0;
+        border-radius: 12px;
+        font-size: 20px;
+    }
 
-.ranking h2 {
-    text-align: center;
-}
+    .rank-team {
+        font-weight: bold;
+    }
 
-.rank-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px;
-    margin: 7px 0;
-    border-radius: 10px;
-    font-weight: bold;
-}
+    .rank-score {
+        font-weight: bold;
+    }
 
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    button {
+        border: none;
+        padding: 15px 25px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .reset-btn {
+        background: #ff1744;
+        color: white;
+    }
+
+    .reset-btn:active {
+        transform: scale(0.96);
+    }
+
+    .projector-btn {
+        background: #00c853;
+        color: white;
+    }
+
+    @media (max-width: 650px) {
+        body {
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 26px;
+        }
+
+        .teams {
+            grid-template-columns: 1fr;
+        }
+
+        .team-name {
+            font-size: 25px;
+        }
+
+        .score-input {
+            height: 60px;
+            font-size: 24px;
+        }
+
+        .ranking {
+            margin-top: 20px;
+        }
+    }
 </style>
 </head>
 
 <body>
 
 <h1>🏆 Score Controller</h1>
-<div class="subtitle">Enter the scores for each round</div>
-
-<div id="teams"></div>
 
 <div class="status" id="status">
-    Connecting to Firebase...
+    🟢 Connected to Firebase
 </div>
 
-<button class="reset" onclick="resetScores()">
-    🔄 RESET ALL SCORES
-</button>
+<div class="teams" id="teamsContainer"></div>
 
 <div class="ranking">
-    <h2>Current Ranking</h2>
-    <div id="ranking"></div>
+    <h2>🏆 Current Ranking</h2>
+    <div id="rankingList"></div>
+</div>
+
+<div class="controls">
+
+    <button class="reset-btn" onclick="resetScores()">
+        🔄 RESET SCORES
+    </button>
+
+    <button class="projector-btn" onclick="openProjector()">
+        📺 OPEN PROJECTOR
+    </button>
+
 </div>
 
 
 <script type="module">
 
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
 import {
     getDatabase,
@@ -171,35 +237,52 @@ import {
     onValue,
     update,
     set
-} from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+}
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
 
-/* ==============================
-   FIREBASE CONFIG
-============================== */
+// ===============================
+// FIREBASE CONFIG
+// ===============================
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDxBocH0sFka2EqYb0IOD6Js_DOAj0GNB4",
-    authDomain: "game-scoreboard-da018.firebaseapp.com",
-    databaseURL: "https://game-scoreboard-da018-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "game-scoreboard-da018",
-    storageBucket: "game-scoreboard-da018.firebasestorage.app",
-    messagingSenderId: "678666747725",
-    appId: "1:678666747725:web:cde8be983c94db2e3ec104"
+
+    apiKey: "AIzaSyDxBocH0Fka2EqYb0IOD6Js_DOAj0GNB4",
+
+    authDomain:
+        "game-scoreboard-da018.firebaseapp.com",
+
+    databaseURL:
+        "https://game-scoreboard-da018-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    projectId:
+        "game-scoreboard-da018",
+
+    storageBucket:
+        "game-scoreboard-da018.firebasestorage.app",
+
+    messagingSenderId:
+        "678666747725",
+
+    appId:
+        "1:678666747725:web:cde8be983c94db2e3ec104"
 };
+
+
+// ===============================
+// INITIALIZE FIREBASE
+// ===============================
 
 const app = initializeApp(firebaseConfig);
 
 const db = getDatabase(app);
 
-const scoreboardRef =
-    ref(db, "scoreboard");
+const scoreboardRef = ref(db, "scoreboard");
 
 
-/* ==============================
-   TEAMS
-============================== */
+// ===============================
+// TEAMS
+// ===============================
 
 const teams = [
 
@@ -234,161 +317,142 @@ const teams = [
 ];
 
 
-/* ==============================
-   CREATE UI
-============================== */
+// ===============================
+// CREATE TEAM UI
+// ===============================
 
-function createUI() {
-
-    const container =
-        document.getElementById("teams");
-
-    container.innerHTML = "";
-
-    teams.forEach(team => {
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            `team ${team.className}`;
-
-        div.innerHTML = `
-
-            <div class="team-header">
-
-                <div class="team-name">
-                    ${team.emoji} ${team.name}
-                </div>
-
-                <div class="total"
-                     id="total-${team.id}">
-                    0
-                </div>
-
-            </div>
-
-            <div class="rounds">
-
-                <div class="round">
-                    <label>ROUND 1</label>
-                    <input
-                        type="number"
-                        min="0"
-                        id="${team.id}-round1">
-                </div>
-
-                <div class="round">
-                    <label>ROUND 2</label>
-                    <input
-                        type="number"
-                        min="0"
-                        id="${team.id}-round2">
-                </div>
-
-                <div class="round">
-                    <label>ROUND 3</label>
-                    <input
-                        type="number"
-                        min="0"
-                        id="${team.id}-round3">
-                </div>
-
-                <div class="round">
-                    <label>ROUND 4</label>
-                    <input
-                        type="number"
-                        min="0"
-                        id="${team.id}-round4">
-                </div>
-
-            </div>
-        `;
-
-        container.appendChild(div);
+const teamsContainer =
+    document.getElementById("teamsContainer");
 
 
-        for (let round = 1; round <= 4; round++) {
+teams.forEach(team => {
 
-            const input =
-                document.getElementById(
-                    `${team.id}-round${round}`
+    const card = document.createElement("div");
+
+    card.className =
+        `team-card ${team.className}`;
+
+    card.innerHTML = `
+
+        <div class="team-name">
+            ${team.emoji} ${team.name}
+        </div>
+
+        <div class="rounds">
+
+            ${createRound(team.id, 1)}
+            ${createRound(team.id, 2)}
+            ${createRound(team.id, 3)}
+            ${createRound(team.id, 4)}
+
+        </div>
+
+        <div class="total">
+            TOTAL:
+            <span id="${team.id}-total">0</span>
+        </div>
+
+    `;
+
+    teamsContainer.appendChild(card);
+
+});
+
+
+// ===============================
+// CREATE ROUND INPUT
+// ===============================
+
+function createRound(team, round) {
+
+    return `
+
+        <div class="round">
+
+            <label>R${round}</label>
+
+            <input
+                class="score-input"
+                type="number"
+                min="0"
+                inputmode="numeric"
+                id="${team}-round${round}"
+                data-team="${team}"
+                data-round="${round}"
+            >
+
+        </div>
+
+    `;
+
+}
+
+
+// ===============================
+// SCORE INPUT LISTENERS
+// ===============================
+
+document
+    .querySelectorAll(".score-input")
+    .forEach(input => {
+
+        input.addEventListener("input", async function() {
+
+            const team =
+                this.dataset.team;
+
+            const round =
+                this.dataset.round;
+
+            let value =
+                this.value.trim();
+
+            // Blank = 0 in Firebase
+            let score =
+                value === ""
+                    ? 0
+                    : Number(value);
+
+            if (score < 0 || isNaN(score)) {
+                score = 0;
+            }
+
+            try {
+
+                await update(
+
+                    ref(
+                        db,
+                        `scoreboard/${team}`
+                    ),
+
+                    {
+                        [`round${round}`]: score
+                    }
+
                 );
 
-            input.addEventListener(
-                "input",
-                () => {
+            } catch(error) {
 
-                    const value =
-                        input.value === ""
-                            ? 0
-                            : Math.max(
-                                0,
-                                Number(input.value)
-                            );
+                console.error(
+                    "Score update failed:",
+                    error
+                );
 
-                    updateScore(
-                        team.id,
-                        round,
-                        value
-                    );
+                document.getElementById("status")
+                    .textContent =
+                    "🔴 Firebase error";
 
-                }
-            );
+            }
 
-        }
+        });
 
     });
 
-}
 
-
-/* ==============================
-   UPDATE FIREBASE
-============================== */
-
-async function updateScore(
-    team,
-    round,
-    score
-) {
-
-    try {
-
-        await update(
-            ref(
-                db,
-                `scoreboard/${team}`
-            ),
-            {
-                [`round${round}`]: score
-            }
-        );
-
-        document.getElementById(
-            "status"
-        ).textContent =
-            "✓ Score saved";
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        document.getElementById(
-            "status"
-        ).textContent =
-            "❌ Firebase error";
-
-    }
-
-}
-
-
-/* ==============================
-   LISTEN FOR CHANGES
-============================== */
+// ===============================
+// LIVE FIREBASE LISTENER
+// ===============================
 
 onValue(
     scoreboardRef,
@@ -397,179 +461,232 @@ onValue(
         const data =
             snapshot.val() || {};
 
-        updateUIFromFirebase(data);
+        let ranking = [];
 
-        document.getElementById(
-            "status"
-        ).textContent =
-            "🟢 Connected • Live";
+
+        teams.forEach(team => {
+
+            const teamData =
+                data[team.id] || {};
+
+            let total = 0;
+
+
+            for (
+                let round = 1;
+                round <= 4;
+                round++
+            ) {
+
+                const input =
+                    document.getElementById(
+                        `${team.id}-round${round}`
+                    );
+
+
+                const score =
+                    Number(
+                        teamData[`round${round}`] || 0
+                    );
+
+
+                total += score;
+
+
+                /*
+                 Don't overwrite the input
+                 while the user is typing.
+                */
+
+                if (
+                    document.activeElement !== input
+                ) {
+
+                    if (
+                        teamData[`round${round}`] === undefined ||
+                        teamData[`round${round}`] === null ||
+                        teamData[`round${round}`] === 0
+                    ) {
+
+                        input.value = "";
+
+                    } else {
+
+                        input.value =
+                            teamData[`round${round}`];
+
+                    }
+
+                }
+
+            }
+
+
+            document.getElementById(
+                `${team.id}-total`
+            ).textContent = total;
+
+
+            ranking.push({
+
+                id: team.id,
+
+                name: team.name,
+
+                emoji: team.emoji,
+
+                total: total
+
+            });
+
+        });
+
+
+        updateRanking(ranking);
+
+        document.getElementById("status")
+            .textContent =
+            "🟢 LIVE — Firebase connected";
+
+    },
+
+    error => {
+
+        console.error(error);
+
+        document.getElementById("status")
+            .textContent =
+            "🔴 Firebase connection error";
 
     }
 );
 
 
-/* ==============================
-   UPDATE UI
-============================== */
+// ===============================
+// RANKING
+// ===============================
 
-function updateUIFromFirebase(data) {
+function updateRanking(ranking) {
 
-    const totals = [];
-
-
-    teams.forEach(team => {
-
-        const teamData =
-            data[team.id] || {};
-
-        let total = 0;
+    ranking.sort(
+        (a, b) => b.total - a.total
+    );
 
 
-        for (
-            let round = 1;
-            round <= 4;
-            round++
+    const rankingList =
+        document.getElementById(
+            "rankingList"
+        );
+
+
+    rankingList.innerHTML = "";
+
+
+    let previousScore = null;
+
+    let position = 0;
+
+    let actualPosition = 0;
+
+
+    ranking.forEach((team, index) => {
+
+        actualPosition++;
+
+
+        if (
+            team.total !== previousScore
         ) {
 
-            const value =
-                Number(
-                    teamData[`round${round}`]
-                ) || 0;
-
-            total += value;
-
-
-            const input =
-                document.getElementById(
-                    `${team.id}-round${round}`
-                );
-
-            if (
-                document.activeElement !== input
-            ) {
-
-                input.value =
-                    teamData[`round${round}`]
-                    ?? "";
-
-            }
+            position =
+                actualPosition;
 
         }
 
 
-        document.getElementById(
-            `total-${team.id}`
-        ).textContent = total;
-
-
-        totals.push({
-
-            ...team,
-
-            total
-
-        });
-
-    });
-
-
-    updateRanking(totals);
-
-}
-
-
-/* ==============================
-   RANKING
-============================== */
-
-function updateRanking(data) {
-
-    data.sort(
-        (a, b) =>
-            b.total - a.total
-    );
-
-
-    const uniqueScores =
-        [...new Set(
-            data.map(team => team.total)
-        )];
-
-
-    const ranking =
-        document.getElementById(
-            "ranking"
-        );
-
-    ranking.innerHTML = "";
-
-
-    data.forEach(team => {
-
-        const position =
-            uniqueScores.indexOf(
-                team.total
-            ) + 1;
+        previousScore =
+            team.total;
 
 
         let positionText;
 
 
-        if (position === 1)
-            positionText = "👑 1ST";
+        if (position === 1) {
 
-        else if (position === 2)
-            positionText = "🥈 2ND";
+            positionText =
+                "👑 1ST";
 
-        else if (position === 3)
-            positionText = "🥉 3RD";
+        }
+        else if (position === 2) {
 
-        else
-            positionText = "4TH";
+            positionText =
+                "🥈 2ND";
+
+        }
+        else if (position === 3) {
+
+            positionText =
+                "🥉 3RD";
+
+        }
+        else {
+
+            positionText =
+                `${position}TH`;
+
+        }
 
 
         const row =
             document.createElement("div");
 
+
         row.className =
-            `rank-row ${team.className}`;
+            "rank-row";
 
 
         row.innerHTML = `
 
-            <span>
+            <div class="rank-team">
+
                 ${positionText}
-                &nbsp;
+                &nbsp;&nbsp;
                 ${team.emoji}
                 ${team.name}
-            </span>
 
-            <span>
+            </div>
+
+            <div class="rank-score">
+
                 ${team.total}
-            </span>
+
+            </div>
 
         `;
 
 
-        ranking.appendChild(row);
+        rankingList.appendChild(row);
 
     });
 
 }
 
 
-/* ==============================
-   RESET
-============================== */
+// ===============================
+// RESET SCORES
+// ===============================
 
-async function resetScores() {
+window.resetScores = async function() {
 
     const confirmed =
         confirm(
-            "Reset all scores?"
+            "Are you sure you want to reset ALL scores?"
         );
 
-    if (!confirmed) return;
+
+    if (!confirmed) {
+        return;
+    }
 
 
     const emptyScores = {
@@ -605,19 +722,87 @@ async function resetScores() {
     };
 
 
-    await set(
-        scoreboardRef,
-        emptyScores
+    try {
+
+        /*
+         * THIS writes directly to Firebase.
+         * Both controller and projector
+         * will receive the reset.
+         */
+
+        await set(
+            scoreboardRef,
+            emptyScores
+        );
+
+
+        /*
+         * Immediately clear the visible inputs.
+         */
+
+        document
+            .querySelectorAll(".score-input")
+            .forEach(input => {
+
+                input.value = "";
+
+            });
+
+
+        document
+            .querySelectorAll(".total")
+            .forEach(total => {
+
+                const number =
+                    total.querySelector("span");
+
+                if (number) {
+                    number.textContent = "0";
+                }
+
+            });
+
+
+        document.getElementById("status")
+            .textContent =
+            "🟢 SCORES RESET";
+
+
+    } catch(error) {
+
+        console.error(
+            "RESET ERROR:",
+            error
+        );
+
+
+        document.getElementById("status")
+            .textContent =
+            "🔴 RESET FAILED";
+
+
+        alert(
+            "Reset failed!\n\n" +
+            error.message
+        );
+
+    }
+
+};
+
+
+// ===============================
+// OPEN PROJECTOR
+// ===============================
+
+window.openProjector = function() {
+
+    window.open(
+        "projector.html",
+        "_blank"
     );
 
-}
-
-
-/* ==============================
-   START
-============================== */
-
-createUI();
+};
 
 </script>
 
