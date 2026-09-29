@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Controller</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #101010;
+    color: white;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin: 10px 0 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+.team {
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.red {
+    background: #c62828;
+}
+
+.blue {
+    background: #1565c0;
+}
+
+.green {
+    background: #2e7d32;
+}
+
+.yellow {
+    background: #d99a00;
+    color: #111;
+}
+
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.team-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.total {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.rounds {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.round label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.round input {
+    width: 100%;
+    padding: 13px 5px;
+    border: none;
+    border-radius: 9px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.reset {
+    background: #d32f2f;
+    color: white;
+}
+
+.status {
+    text-align: center;
+    margin: 15px 0;
+    font-size: 14px;
+    color: #69f0ae;
+}
+
+.ranking {
+    background: #1c1c1c;
+    border-radius: 18px;
+    padding: 20px;
+    margin-top: 25px;
+}
+
+.ranking h2 {
+    text-align: center;
+}
+
+.rank-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    margin: 7px 0;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🏆 Score Controller</h1>
+<div class="subtitle">Enter the scores for each round</div>
+
+<div id="teams"></div>
+
+<div class="status" id="status">
+    Connecting to Firebase...
+</div>
+
+<button class="reset" onclick="resetScores()">
+    🔄 RESET ALL SCORES
+</button>
+
+<div class="ranking">
+    <h2>Current Ranking</h2>
+    <div id="ranking"></div>
+</div>
+
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+import {
+    getDatabase,
+    ref,
+    onValue,
+    update,
+    set
+} from
+"https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+
+/* ==============================
+   FIREBASE CONFIG
+============================== */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDxBocH0sFka2EqYb0IOD6Js_DOAj0GNB4",
+    authDomain: "game-scoreboard-da018.firebaseapp.com",
+    databaseURL: "https://game-scoreboard-da018-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "game-scoreboard-da018",
+    storageBucket: "game-scoreboard-da018.firebasestorage.app",
+    messagingSenderId: "678666747725",
+    appId: "1:678666747725:web:cde8be983c94db2e3ec104"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+const scoreboardRef =
+    ref(db, "scoreboard");
+
+
+/* ==============================
+   TEAMS
+============================== */
+
+const teams = [
+
+    {
+        id: "red",
+        name: "RED",
+        emoji: "🔴",
+        className: "red"
+    },
+
+    {
+        id: "blue",
+        name: "BLUE",
+        emoji: "🔵",
+        className: "blue"
+    },
+
+    {
+        id: "green",
+        name: "GREEN",
+        emoji: "🟢",
+        className: "green"
+    },
+
+    {
+        id: "yellow",
+        name: "YELLOW",
+        emoji: "🟡",
+        className: "yellow"
+    }
+
+];
+
+
+/* ==============================
+   CREATE UI
+============================== */
+
+function createUI() {
+
+    const container =
+        document.getElementById("teams");
+
+    container.innerHTML = "";
+
+    teams.forEach(team => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            `team ${team.className}`;
+
+        div.innerHTML = `
+
+            <div class="team-header">
+
+                <div class="team-name">
+                    ${team.emoji} ${team.name}
+                </div>
+
+                <div class="total"
+                     id="total-${team.id}">
+                    0
+                </div>
+
+            </div>
+
+            <div class="rounds">
+
+                <div class="round">
+                    <label>ROUND 1</label>
+                    <input
+                        type="number"
+                        min="0"
+                        id="${team.id}-round1">
+                </div>
+
+                <div class="round">
+                    <label>ROUND 2</label>
+                    <input
+                        type="number"
+                        min="0"
+                        id="${team.id}-round2">
+                </div>
+
+                <div class="round">
+                    <label>ROUND 3</label>
+                    <input
+                        type="number"
+                        min="0"
+                        id="${team.id}-round3">
+                </div>
+
+                <div class="round">
+                    <label>ROUND 4</label>
+                    <input
+                        type="number"
+                        min="0"
+                        id="${team.id}-round4">
+                </div>
+
+            </div>
+        `;
+
+        container.appendChild(div);
+
+
+        for (let round = 1; round <= 4; round++) {
+
+            const input =
+                document.getElementById(
+                    `${team.id}-round${round}`
+                );
+
+            input.addEventListener(
+                "input",
+                () => {
+
+                    const value =
+                        input.value === ""
+                            ? 0
+                            : Math.max(
+                                0,
+                                Number(input.value)
+                            );
+
+                    updateScore(
+                        team.id,
+                        round,
+                        value
+                    );
+
+                }
+            );
+
+        }
+
+    });
+
+}
+
+
+/* ==============================
+   UPDATE FIREBASE
+============================== */
+
+async function updateScore(
+    team,
+    round,
+    score
+) {
+
+    try {
+
+        await update(
+            ref(
+                db,
+                `scoreboard/${team}`
+            ),
+            {
+                [`round${round}`]: score
+            }
+        );
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "✓ Score saved";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "❌ Firebase error";
+
+    }
+
+}
+
+
+/* ==============================
+   LISTEN FOR CHANGES
+============================== */
+
+onValue(
+    scoreboardRef,
+    snapshot => {
+
+        const data =
+            snapshot.val() || {};
+
+        updateUIFromFirebase(data);
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "🟢 Connected • Live";
+
+    }
+);
+
+
+/* ==============================
+   UPDATE UI
+============================== */
+
+function updateUIFromFirebase(data) {
+
+    const totals = [];
+
+
+    teams.forEach(team => {
+
+        const teamData =
+            data[team.id] || {};
+
+        let total = 0;
+
+
+        for (
+            let round = 1;
+            round <= 4;
+            round++
+        ) {
+
+            const value =
+                Number(
+                    teamData[`round${round}`]
+                ) || 0;
+
+            total += value;
+
+
+            const input =
+                document.getElementById(
+                    `${team.id}-round${round}`
+                );
+
+            if (
+                document.activeElement !== input
+            ) {
+
+                input.value =
+                    teamData[`round${round}`]
+                    ?? "";
+
+            }
+
+        }
+
+
+        document.getElementById(
+            `total-${team.id}`
+        ).textContent = total;
+
+
+        totals.push({
+
+            ...team,
+
+            total
+
+        });
+
+    });
+
+
+    updateRanking(totals);
+
+}
+
+
+/* ==============================
+   RANKING
+============================== */
+
+function updateRanking(data) {
+
+    data.sort(
+        (a, b) =>
+            b.total - a.total
+    );
+
+
+    const uniqueScores =
+        [...new Set(
+            data.map(team => team.total)
+        )];
+
+
+    const ranking =
+        document.getElementById(
+            "ranking"
+        );
+
+    ranking.innerHTML = "";
+
+
+    data.forEach(team => {
+
+        const position =
+            uniqueScores.indexOf(
+                team.total
+            ) + 1;
+
+
+        let positionText;
+
+
+        if (position === 1)
+            positionText = "👑 1ST";
+
+        else if (position === 2)
+            positionText = "🥈 2ND";
+
+        else if (position === 3)
+            positionText = "🥉 3RD";
+
+        else
+            positionText = "4TH";
+
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            `rank-row ${team.className}`;
+
+
+        row.innerHTML = `
+
+            <span>
+                ${positionText}
+                &nbsp;
+                ${team.emoji}
+                ${team.name}
+            </span>
+
+            <span>
+                ${team.total}
+            </span>
+
+        `;
+
+
+        ranking.appendChild(row);
+
+    });
+
+}
+
+
+/* ==============================
+   RESET
+============================== */
+
+async function resetScores() {
+
+    const confirmed =
+        confirm(
+            "Reset all scores?"
+        );
+
+    if (!confirmed) return;
+
+
+    const emptyScores = {
+
+        red: {
+            round1: 0,
+            round2: 0,
+            round3: 0,
+            round4: 0
+        },
+
+        blue: {
+            round1: 0,
+            round2: 0,
+            round3: 0,
+            round4: 0
+        },
+
+        green: {
+            round1: 0,
+            round2: 0,
+            round3: 0,
+            round4: 0
+        },
+
+        yellow: {
+            round1: 0,
+            round2: 0,
+            round3: 0,
+            round4: 0
+        }
+
+    };
+
+
+    await set(
+        scoreboardRef,
+        emptyScores
+    );
+
+}
+
+
+/* ==============================
+   START
+============================== */
+
+createUI();
+
+</script>
+
+</body>
+</html>
